@@ -7,14 +7,18 @@ const Countries = () => {
 
     const fetchData = async () => {
         try {
-        const response = await fetch("https://xcountries-backend.azurewebsites.net/all");
-        const data = await response.json();
-        console.log(data)
-        setData(data);
-    } catch (error) {
-            console.error(error);
+          const response = await fetch("https://xcountries-backend.azurewebsites.net/all");
+          if (!response.ok) {
+            throw new Error('Error fetching data');
+          }
+          const data = await response.json();
+          console.log(data);
+          setData(data);
+        } catch (error) {
+          console.error('Error fetching data:', error.message);
         }
-    }
+      };
+      
 
     useEffect(() => {
         fetchData();
