@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import "./Countries.css"
 import Card from '../Card/Card';
-const Countries = () => {
-
+const Countries = ({searchQuery}) => {
+    const [filterData, setFilterData] = useState([]);
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
@@ -12,23 +12,42 @@ const Countries = () => {
             throw new Error('Error fetching data');
           }
           const data = await response.json();
-          console.log(data);
           setData(data);
+          setFilterData(data);
         } catch (error) {
           console.error('Error fetching data:', error.message);
         }
       };
       
+      
+      const  fetchSearchQuery = async () => {
+        if(searchQuery) {
+          const filterCountry = data.filter(country => 
+            country.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+
+          setFilterData(filterCountry);
+        }
+
+        if(!searchQuery) {
+          setFilterData(data);
+        }
+      }
+
+      useEffect(() => {
+        fetchSearchQuery();
+      }, [searchQuery, data]);
 
     useEffect(() => {
         fetchData();
     }, []);
   return (
     <div className='countries'>
+
         {
-            !data ? (<p>Loading</p>) :
+            !filterData.length > 0 ? (<p>Loading</p>) :
                 (
-                 data.map((item, id) => (<Card country = {item} key={id}/>))
+                 filterData.map((item, id) => (<Card country = {item} key={id}/>))
                 )
         }
     </div>

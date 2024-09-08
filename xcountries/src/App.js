@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Countries from './components/Countries/Countries'
+import Navbar from './components/Navbar/Navbar'
 
 const App = () => {
+
+  const [searchQuery, setSearchQuery] = useState("");
   return (
-    <div><Countries/></div>
+    <div>
+      <Navbar setSearchQuery = {setSearchQuery}/>
+      <Countries searchQuery = {searchQuery}/>
+    </div>
   )
 }
 
